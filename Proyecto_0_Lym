@@ -1,0 +1,155 @@
+
+def procesar_archivo_texto(ruta_archivo):
+    try:
+        with open(ruta_archivo, 'r') as file: # Abre el archivo en modo lectura
+            contenido = file.read()
+            #print("Contenido del archivo leído:", contenido)
+            return contenido 
+    except FileNotFoundError:
+        print("No se encontró el archivo")
+        return None
+
+# Ruta del archivo de texto con las instrucciones
+ruta_archivo = "/Users/anacristinarodriguez/Desktop/Lym/Pruebas.txt"  
+contenido_archivo = procesar_archivo_texto(ruta_archivo)
+
+
+def parser_robot(instrucciones)-> bool:
+    sintaxis_correcta=True
+    instrucciones_separadas = instrucciones.split()
+    direcciones_validas = [":front", ":right", ":left", ":back"]
+    constantes_validas = ["Dim", "myXpos", "myYpos", "myChips", "myBalloons", "balloonsHere" , "ChipsHere" , "Spaces"]
+    #print(instrucciones_separadas)
+    
+
+    i=0
+    while i < len(instrucciones_separadas):
+        instruccion=instrucciones_separadas[i]
+
+        # Verificar (defvar name n)
+        # Verifica que la lista instrucciones_separadas tenga al menos dos elementos más a partir de la posición actual
+        if i+2 < len(instrucciones_separadas) and instruccion == "defvar":
+            name = instrucciones_separadas[i+1]
+            n = instrucciones_separadas[i+2]
+            if (name.isalpha()) and (n.isnumeric() or n in constantes_validas):
+                i+=3
+            else:
+                sintaxis_correcta=False
+                break
+        
+      
+        # Verificar (= name n)
+        elif i+2 < len(instrucciones_separadas) and instruccion == "=":
+            name = instrucciones_separadas[i+1]
+            n = instrucciones_separadas[i+2]
+            if name.isalpha() and (n.isnumeric() or n in constantes_validas):
+                i+=3
+            else:
+                sintaxis_correcta=False
+                break
+
+        # Verificar (move n)
+        elif i+1 < len(instrucciones_separadas) and instruccion == "move":
+            n = instrucciones_separadas[i+1]
+            if n.isnumeric() or valor.isdigit() or valor in constantes_validas:
+                i+=2
+            else:
+                sintaxis_correcta=False
+                break
+
+        # Verificar (skip n)
+        elif i+1 < len(instrucciones_separadas) and instruccion == "skip":
+            valor = instrucciones_separadas[i+1]
+            if valor.isnumeric() or valor.isdigit() or valor in constantes_validas:
+                i+=2
+            else:
+                sintaxis_correcta=False
+                break
+
+        # Verificar (turn D)
+        elif i+1 < len(instrucciones_separadas) and instruccion == "turn":
+            valor = instrucciones_separadas[i+1]
+            if valor == ":left" or ":right" or ":around":
+                i+=2
+            else: 
+                sintaxis_correcta=False
+                break
+        
+        # Verificar (face O)
+        elif i+1 < len(instrucciones_separadas) and instruccion == "face":
+            valor = instrucciones_separadas[i+1]
+            if valor == ":north" or ":south" or ":east" or ":west":
+                i+=2
+            else:
+                sintaxis_correcta=False
+                break
+        
+        # Verificar (put X n)
+        elif i+2 < len(instrucciones_separadas) and instruccion == "put":
+            X = instrucciones_separadas[i+1]
+            n = instrucciones_separadas[i+2]
+            if (X == ":balloons" or ":chips") and n.isnumeric():
+                i+=3
+            else:
+                sintaxis_correcta=False
+                break
+        
+        # Verificar (pick X n)
+        elif i+2 < len(instrucciones_separadas) and instruccion == "pick":
+            X = instrucciones_separadas[i+1]
+            n = instrucciones_separadas[i+2]
+            if (X == ":balloons" or ":chips") and n.isnumeric():
+                i+=3
+            else:
+                sintaxis_correcta=False
+                break
+
+        # Verificar (move-dir n D)
+        elif i+2 < len(instrucciones_separadas) and instruccion == "move-dir":
+            n = instrucciones_separadas[i+1]
+            D = instrucciones_separadas[i+2]
+            if (n.isnumeric() or n in constantes_validas) and (D == ":front" or ":right" or ":left" or ":back"):
+                i+=3
+            else:
+                sintaxis_correcta=False
+                break
+
+        # Verificar (run-dirs Ds)
+        elif i+1 < len(instrucciones_separadas) and instruccion == "run-dirs":
+            Ds = instrucciones_separadas[i+1]
+            for direccion in Ds:
+                if direccion not in direcciones_validas:
+                    sintaxis_correcta=False
+                    break          
+            else:
+                sintaxis_correcta=False
+                break
+        
+        # Verificar (move-face n O):
+        elif i+2 < len(instrucciones_separadas) and instruccion == "move-face":
+            n = instrucciones_separadas[i+1]
+            O = instrucciones_separadas[i+2]
+            if (n.isnumeric() or n in constantes_validas) and (O == ":north" or ":south" or ":west" or ":east"):
+                i+=3
+            else:
+                sintaxis_correcta=False
+                break
+
+        # Permitir null 
+        elif instruccion == "null":
+            i+=1
+            continue
+
+        #Verficiar function definition
+
+        i+=1
+
+    return (sintaxis_correcta)
+
+
+if contenido_archivo:
+    resultado_parser = " yes" if parser_robot(contenido_archivo) else " no"
+    print("Is the syntax correct?"  + resultado_parser)
+
+
+
