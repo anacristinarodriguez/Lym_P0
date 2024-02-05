@@ -10,7 +10,7 @@ def procesar_archivo_texto(ruta_archivo):
         return None
 
 # Ruta del archivo de texto con las instrucciones
-ruta_archivo = "/Users/anacristinarodriguez/Desktop/Lym/Pruebas.txt"  
+ruta_archivo = "\Users\paula\Desktop\Lym\Pruebas.txt"
 contenido_archivo = procesar_archivo_texto(ruta_archivo)
 
 
@@ -141,7 +141,15 @@ def parser_robot(instrucciones)-> bool:
             continue
 
         #Verficiar function definition
-
+        instruct=instrucciones_separadas[i+1]
+        pos_paren=[]
+        if i+2 < len(instrucciones_separadas) and instruct == "defun":
+            name = instrucciones_separadas[i+2]
+            params=[]
+            if instrucciones_separadas[i+3]=="(":
+                for elem in range(4,len(instrucciones_separadas)):
+                    if instrucciones_separadas[elem] == ")":
+                        pos_paren.append(elem)
         i+=1
 
     return (sintaxis_correcta)
