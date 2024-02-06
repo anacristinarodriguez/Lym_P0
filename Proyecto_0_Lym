@@ -119,11 +119,10 @@ def parser_robot(instrucciones)-> bool:
             Ds = instrucciones_separadas[i+1]
             for direccion in Ds:
                 if direccion not in direcciones_validas:
+                    sintaxis_correcta=False 
+                else:
                     sintaxis_correcta=False
-                    break          
-            else:
-                sintaxis_correcta=False
-                break
+                    break
         
         # Verificar (move-face n O):
         elif i+2 < len(instrucciones_separadas) and instruccion == "move-face":
@@ -151,7 +150,7 @@ def parser_robot(instrucciones)-> bool:
                 sintaxis_correcta=False
                 break
             else: 
-                continue
+                sintaxis_correcta=True
             params=[]
             if instrucciones_separadas[i+3]=="(":
                 for elem in range(4,len(instrucciones_separadas)):
@@ -163,17 +162,14 @@ def parser_robot(instrucciones)-> bool:
                 for eleme in params:
                     if not eleme.isalpha():
                         sintaxis_correcta=False
-                        break
                     else:
-                        continue
+                        sintaxis_correcta=True
                 if instrucciones_separadas[first_cerrado+1] == "(":
                     if instrucciones_separadas[first_cerrado+2] in commands:
                         sintaxis_correcta=True
                     else:
                         sintaxis_correcta=False
-                        break
-
-    return (sintaxis_correcta)
+        return (sintaxis_correcta)
 
 
 if contenido_archivo:
