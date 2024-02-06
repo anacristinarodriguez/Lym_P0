@@ -171,9 +171,69 @@ def parser_robot(instrucciones)-> bool:
                         sintaxis_correcta=False
         return (sintaxis_correcta)
 
-        #Verificar conditions
+        #Conditions
 
-        elif 
+        #Verificar facing?
+        i=0
+        direcciones_validas=[":north", ":south", ":east", ":west"]
+        elif instrucciones_separadas[i+1] == "facing?":
+            if instrucciones_separadas[i+2] in direcciones_validas:
+                sintaxis_correcta=True
+                break
+            else:
+                sintaxis_correcta=False
+        
+        #Verificar blocked?
+        i=0
+
+        #Verificar can-put?
+        i=0
+        x=["chips","balloons"]
+        elif instrucciones_separadas[i+1] == "can-put?":
+            if instrucciones_separadas[i+2] in x:
+                if (instrucciones_separadas[i+3]).isdigit():
+                    sintaxis_correcta=True
+                    break
+            else:
+                sintaxis_correcta=False
+
+        #Verificar can-pick?
+        i=0
+        x=["chips","balloons"]
+        elif instrucciones_separadas[i+1] == "can-pick?":
+            if instrucciones_separadas[i+2] in x:
+                if (instrucciones_separadas[i+3]).isdigit():
+                    sintaxis_correcta=True
+                    break
+            else:
+                sintaxis_correcta=False
+
+        #Verificar can-move?
+        i=0
+        direcciones_validas=[":north", ":south", ":east", ":west"]
+        elif instrucciones_separadas[i+1] == "can-move?":
+            if instrucciones_separadas[i+2] in direcciones_validas:
+                sintaxis_correcta=True
+                break
+            else:
+                sintaxis_correcta=False
+
+        #Verificar isZero?
+        i=0
+        elif (instrucciones_separadas[i+1]).lower() == "iszero?":
+            if (instrucciones_separadas[i+2]).isdigit():
+                sintaxis_correcta=True
+            else:
+                sintaxis_correcta=False
+
+        #Verificar not cond
+
+        i=0
+        elif instrucciones_separadas[i+1] == "not":
+            if instrucciones_separadas[i+2] ==
+
+
+
 
 
 if contenido_archivo:
