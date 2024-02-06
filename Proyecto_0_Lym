@@ -144,7 +144,7 @@ def parser_robot(instrucciones)-> bool:
         instruct=instrucciones_separadas[i+1]
         commands=["put","move"]
         pos_paren=[]
-        if i+2 < len(instrucciones_separadas) and instruct == "defun":
+        elif i+2 < len(instrucciones_separadas) and instruct == "defun":
             name = instrucciones_separadas[i+2]
             if not name.isalpha():
                 sintaxis_correcta=False
@@ -170,6 +170,10 @@ def parser_robot(instrucciones)-> bool:
                     else:
                         sintaxis_correcta=False
         return (sintaxis_correcta)
+
+        #Verificar conditions
+
+        elif 
 
 
 if contenido_archivo:
