@@ -17,11 +17,11 @@ contenido_archivo = procesar_archivo_texto(ruta_archivo)
 def parser_robot(instrucciones)-> bool:
     sintaxis_correcta=True
     instrucciones_separadas = instrucciones.split()
-    direcciones_validas = [":front", ":right", ":left", ":back"]
     constantes_validas = ["Dim", "myXpos", "myYpos", "myChips", "myBalloons", "balloonsHere" , "ChipsHere" , "Spaces"]
     #print(instrucciones_separadas)
-    
 
+def commands_verification(instrucciones)-> bool:
+    constantes_validas = ["Dim", "myXpos", "myYpos", "myChips", "myBalloons", "balloonsHere" , "ChipsHere" , "Spaces"]
     i=0
     while i < len(instrucciones_separadas):
         instruccion=instrucciones_separadas[i]
@@ -29,6 +29,7 @@ def parser_robot(instrucciones)-> bool:
         # Verificar (defvar name n)
         # Verifica que la lista instrucciones_separadas tenga al menos dos elementos más a partir de la posición actual
         if i+2 < len(instrucciones_separadas) and instruccion == "defvar":
+            
             name = instrucciones_separadas[i+1]
             n = instrucciones_separadas[i+2]
             if (name.isalpha()) and (n.isnumeric() or n in constantes_validas):
@@ -116,6 +117,7 @@ def parser_robot(instrucciones)-> bool:
 
         # Verificar (run-dirs Ds)
         elif i+1 < len(instrucciones_separadas) and instruccion == "run-dirs":
+            direcciones_validas = [":front", ":right", ":left", ":back"]
             Ds = instrucciones_separadas[i+1]
             for direccion in Ds:
                 if direccion not in direcciones_validas:
@@ -140,6 +142,7 @@ def parser_robot(instrucciones)-> bool:
             continue
 
         #Verficar function definition
+def functDef_verification(instruccion)->bool:
         i=0
         instruct=instrucciones_separadas[i+1]
         commands=["put","move"]
@@ -171,11 +174,12 @@ def parser_robot(instrucciones)-> bool:
                         sintaxis_correcta=False
         return (sintaxis_correcta)
 
-        #Conditions
 
+def condition_verification(instruccion)->bool:
+    direcciones_validas=[":north", ":south", ":east", ":west"]
+    x=["chips","balloons"]
+    i=0
         #Verificar facing?
-        i=0
-        direcciones_validas=[":north", ":south", ":east", ":west"]
         elif instrucciones_separadas[i+1] == "facing?":
             if instrucciones_separadas[i+2] in direcciones_validas:
                 sintaxis_correcta=True
@@ -184,11 +188,8 @@ def parser_robot(instrucciones)-> bool:
                 sintaxis_correcta=False
         
         #Verificar blocked?
-        i=0
 
         #Verificar can-put?
-        i=0
-        x=["chips","balloons"]
         elif instrucciones_separadas[i+1] == "can-put?":
             if instrucciones_separadas[i+2] in x:
                 if (instrucciones_separadas[i+3]).isdigit():
@@ -198,8 +199,6 @@ def parser_robot(instrucciones)-> bool:
                 sintaxis_correcta=False
 
         #Verificar can-pick?
-        i=0
-        x=["chips","balloons"]
         elif instrucciones_separadas[i+1] == "can-pick?":
             if instrucciones_separadas[i+2] in x:
                 if (instrucciones_separadas[i+3]).isdigit():
@@ -209,8 +208,6 @@ def parser_robot(instrucciones)-> bool:
                 sintaxis_correcta=False
 
         #Verificar can-move?
-        i=0
-        direcciones_validas=[":north", ":south", ":east", ":west"]
         elif instrucciones_separadas[i+1] == "can-move?":
             if instrucciones_separadas[i+2] in direcciones_validas:
                 sintaxis_correcta=True
@@ -219,7 +216,6 @@ def parser_robot(instrucciones)-> bool:
                 sintaxis_correcta=False
 
         #Verificar isZero?
-        i=0
         elif (instrucciones_separadas[i+1]).lower() == "iszero?":
             if (instrucciones_separadas[i+2]).isdigit():
                 sintaxis_correcta=True
@@ -227,8 +223,6 @@ def parser_robot(instrucciones)-> bool:
                 sintaxis_correcta=False
 
         #Verificar not cond
-
-        i=0
         elif instrucciones_separadas[i+1] == "not":
             if instrucciones_separadas[i+2] ==
 
