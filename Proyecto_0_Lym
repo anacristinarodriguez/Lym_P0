@@ -15,13 +15,25 @@ contenido_archivo = procesar_archivo_texto(ruta_archivo)
 
 
 def parser_robot(instrucciones)-> bool:
-    sintaxis_correcta=True
-    
+    sintaxis_correcta=False
+    if commands_verification(instrucciones):
+        sintaxis_correcta=True
+    elif functDef_verification(instrucciones):
+        sintaxis_correcta=True
+    elif condition_verification(instrucciones):
+        sintaxis_correcta=True
+    else:
+        sintaxis_correcta=False
     #print(instrucciones_separadas)
 
 def commands_verification(instrucciones)-> bool:
     constantes_validas = ["Dim", "myXpos", "myYpos", "myChips", "myBalloons", "balloonsHere" , "ChipsHere" , "Spaces"]
-    instrucciones_separadas = instrucciones.split()
+    direcciones_validas = [":front", ":right", ":left", ":back"]
+
+    if isinstance(instrucciones,list) == True:
+        instrucciones_separadas = instrucciones
+    else:
+        instrucciones_separadas = instrucciones.split()
     i=0
     while i < len(instrucciones_separadas):
         instruccion=instrucciones_separadas[i]
@@ -109,7 +121,7 @@ def commands_verification(instrucciones)-> bool:
         elif i+2 < len(instrucciones_separadas) and instruccion == "move-dir":
             n = instrucciones_separadas[i+1]
             D = instrucciones_separadas[i+2]
-            if (n.isnumeric() or n in constantes_validas) and (D == ":front" or ":right" or ":left" or ":back"):
+            if (n.isnumeric() or n in constantes_validas) and (D in direcciones_validas):
                 i+=3
             else:
                 sintaxis_correcta=False
@@ -117,7 +129,6 @@ def commands_verification(instrucciones)-> bool:
 
         # Verificar (run-dirs Ds)
         elif i+1 < len(instrucciones_separadas) and instruccion == "run-dirs":
-            direcciones_validas = [":front", ":right", ":left", ":back"]
             Ds = instrucciones_separadas[i+1]
             for direccion in Ds:
                 if direccion not in direcciones_validas:
@@ -130,7 +141,7 @@ def commands_verification(instrucciones)-> bool:
         elif i+2 < len(instrucciones_separadas) and instruccion == "move-face":
             n = instrucciones_separadas[i+1]
             O = instrucciones_separadas[i+2]
-            if (n.isnumeric() or n in constantes_validas) and (O == ":north" or ":south" or ":west" or ":east"):
+            if (n.isnumeric() or n in constantes_validas) and (O in direcciones_validas):
                 i+=3
             else:
                 sintaxis_correcta=False
@@ -141,12 +152,14 @@ def commands_verification(instrucciones)-> bool:
             i+=1
             continue
 
-        #Verficar function definition
-def functDef_verification(instruccion)->bool:
+def functDef_verification(instrucciones)->bool:
+        if isinstance(instrucciones,list) == True:
+            instrucciones_separadas = instrucciones
+        else:
+            instrucciones_separadas = instrucciones.split()
         i=0
-        instrucciones_separadas = instrucciones.split()
         instruct=instrucciones_separadas[i+1]
-        commands=["put","move"]
+        commands=[]
         pos_paren=[]
         elif i+2 < len(instrucciones_separadas) and instruct == "defun":
             name = instrucciones_separadas[i+2]
@@ -164,19 +177,25 @@ def functDef_verification(instruccion)->bool:
                 for elemento in range(4,first_cerrado):
                     params.append(instrucciones_separadas[elem])
                 for eleme in params:
-                    if not eleme.isalpha():
+                    if not eleme.isalnum():
                         sintaxis_correcta=False
+                        break
                     else:
                         sintaxis_correcta=True
                 if instrucciones_separadas[first_cerrado+1] == "(":
-                    if instrucciones_separadas[first_cerrado+2] in commands:
-                        sintaxis_correcta=True
-                    else:
-                        sintaxis_correcta=False
+                    for comando in range(first_cerrado+1,len(instrucciones_separadas)-1):
+                        commands.append(instrucciones_separadas[comando])
+                    
+                    
         return (sintaxis_correcta)
 
 
-def condition_verification(instruccion)->bool:
+def condition_verification(instrucciones)->bool:
+    if isinstance(instrucciones,list) == True:
+        instrucciones_separadas = instrucciones
+    else:
+        instrucciones_separadas = instrucciones.split()
+
     instrucciones_separadas = instrucciones.split()
     direcciones_validas=[":north", ":south", ":east", ":west"]
     x=["chips","balloons"]
