@@ -16,12 +16,12 @@ contenido_archivo = procesar_archivo_texto(ruta_archivo)
 
 def parser_robot(instrucciones)-> bool:
     sintaxis_correcta=True
-    instrucciones_separadas = instrucciones.split()
-    constantes_validas = ["Dim", "myXpos", "myYpos", "myChips", "myBalloons", "balloonsHere" , "ChipsHere" , "Spaces"]
+    
     #print(instrucciones_separadas)
 
 def commands_verification(instrucciones)-> bool:
     constantes_validas = ["Dim", "myXpos", "myYpos", "myChips", "myBalloons", "balloonsHere" , "ChipsHere" , "Spaces"]
+    instrucciones_separadas = instrucciones.split()
     i=0
     while i < len(instrucciones_separadas):
         instruccion=instrucciones_separadas[i]
@@ -144,6 +144,7 @@ def commands_verification(instrucciones)-> bool:
         #Verficar function definition
 def functDef_verification(instruccion)->bool:
         i=0
+        instrucciones_separadas = instrucciones.split()
         instruct=instrucciones_separadas[i+1]
         commands=["put","move"]
         pos_paren=[]
@@ -176,6 +177,7 @@ def functDef_verification(instruccion)->bool:
 
 
 def condition_verification(instruccion)->bool:
+    instrucciones_separadas = instrucciones.split()
     direcciones_validas=[":north", ":south", ":east", ":west"]
     x=["chips","balloons"]
     i=0
