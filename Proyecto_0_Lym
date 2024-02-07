@@ -185,7 +185,10 @@ def functDef_verification(instrucciones)->bool:
                 if instrucciones_separadas[first_cerrado+1] == "(":
                     for comando in range(first_cerrado+1,len(instrucciones_separadas)-1):
                         commands.append(instrucciones_separadas[comando])
-                    
+            if commands_verification(commands) == True:
+                sintaxis_correcta = True
+            else:
+                sintaxis_correcta = False
                     
         return (sintaxis_correcta)
 
