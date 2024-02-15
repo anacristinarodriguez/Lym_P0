@@ -1,9 +1,9 @@
 def procesar_archivo_texto(ruta_archivo):
     try:
-        with open(ruta_archivo, 'r') as file: # Abre el archivo en modo lectura
+        with open(ruta_archivo, 'r') as file:
             contenido = file.read()
-            #print("Contenido del archivo leído:", contenido)
-            return contenido 
+            # print("Contenido del archivo leído:", contenido)
+            return contenido
     except FileNotFoundError:
         print("No se encontró el archivo")
         return None
@@ -15,21 +15,19 @@ contenido_archivo = procesar_archivo_texto(ruta_archivo)
 
 def parser_robot(instrucciones) -> bool:
     sintaxis_correcta = True
-    
-    if not (commands_verification(instrucciones) and 
-            functDef_verification(instrucciones) and 
+
+    if not (commands_verification(instrucciones) and
+            functDef_verification(instrucciones) and
             condition_verification(instrucciones)):
-             sintaxis_correcta = False
+        sintaxis_correcta = False
     return sintaxis_correcta
 
- 
 
 def commands_verification(instrucciones) -> bool:
-    sintaxis_correcta = True  # Set initially to True
+    sintaxis_correcta = True
     constantes_validas = ["Dim", "myXpos", "myYpos", "myChips", "myBalloons", "balloonsHere", "ChipsHere", "Spaces"]
     direcciones_validas = [":front", ":right", ":left", ":back"]
 
-    if isinstance(instrucciones, list):
     if isinstance(instrucciones, list):
         instrucciones_separadas = instrucciones
     else:
@@ -37,9 +35,7 @@ def commands_verification(instrucciones) -> bool:
 
     i = 0
 
-    i = 0
     while i < len(instrucciones_separadas):
-        instruccion = instrucciones_separadas[i]
         instruccion = instrucciones_separadas[i]
 
         # Verificar (defvar name n)
@@ -48,29 +44,17 @@ def commands_verification(instrucciones) -> bool:
             n = instrucciones_separadas[i + 2]
             if name.isalpha() and (n.isnumeric() or n in constantes_validas):
                 i += 3
-        if i + 2 < len(instrucciones_separadas) and instruccion == "defvar":
-            name = instrucciones_separadas[i + 1]
-            n = instrucciones_separadas[i + 2]
-            if name.isalpha() and (n.isnumeric() or n in constantes_validas):
-                i += 3
             else:
                 sintaxis_correcta = False
-                sintaxis_correcta = False
                 break
-
 
         # Verificar (= name n)
         elif i + 2 < len(instrucciones_separadas) and instruccion == "=":
             name = instrucciones_separadas[i + 1]
             n = instrucciones_separadas[i + 2]
-        elif i + 2 < len(instrucciones_separadas) and instruccion == "=":
-            name = instrucciones_separadas[i + 1]
-            n = instrucciones_separadas[i + 2]
             if name.isalpha() and (n.isnumeric() or n in constantes_validas):
                 i += 3
-                i += 3
             else:
-                sintaxis_correcta = False
                 sintaxis_correcta = False
                 break
 
@@ -79,12 +63,7 @@ def commands_verification(instrucciones) -> bool:
             n = instrucciones_separadas[i + 1]
             if n.isnumeric() or n in constantes_validas:
                 i += 2
-        elif i + 1 < len(instrucciones_separadas) and instruccion == "move":
-            n = instrucciones_separadas[i + 1]
-            if n.isnumeric() or n in constantes_validas:
-                i += 2
             else:
-                sintaxis_correcta = False
                 sintaxis_correcta = False
                 break
 
@@ -93,12 +72,7 @@ def commands_verification(instrucciones) -> bool:
             valor = instrucciones_separadas[i + 1]
             if valor.isnumeric() or valor in constantes_validas:
                 i += 2
-        elif i + 1 < len(instrucciones_separadas) and instruccion == "skip":
-            valor = instrucciones_separadas[i + 1]
-            if valor.isnumeric() or valor in constantes_validas:
-                i += 2
             else:
-                sintaxis_correcta = False
                 sintaxis_correcta = False
                 break
 
@@ -109,29 +83,16 @@ def commands_verification(instrucciones) -> bool:
                 i += 2
             else:
                 sintaxis_correcta = False
-        elif i + 1 < len(instrucciones_separadas) and instruccion == "turn":
-            valor = instrucciones_separadas[i + 1]
-            if valor in [":left", ":right", ":around"]:
-                i += 2
-            else:
-                sintaxis_correcta = False
                 break
-
 
         # Verificar (face O)
         elif i + 1 < len(instrucciones_separadas) and instruccion == "face":
             valor = instrucciones_separadas[i + 1]
             if valor in [":north", ":south", ":east", ":west"]:
                 i += 2
-        elif i + 1 < len(instrucciones_separadas) and instruccion == "face":
-            valor = instrucciones_separadas[i + 1]
-            if valor in [":north", ":south", ":east", ":west"]:
-                i += 2
             else:
                 sintaxis_correcta = False
-                sintaxis_correcta = False
                 break
-
 
         # Verificar (put X n)
         elif i + 2 < len(instrucciones_separadas) and instruccion == "put":
@@ -139,16 +100,9 @@ def commands_verification(instrucciones) -> bool:
             n = instrucciones_separadas[i + 2]
             if (X in [":balloons", ":chips"]) and n.isnumeric():
                 i += 3
-        elif i + 2 < len(instrucciones_separadas) and instruccion == "put":
-            X = instrucciones_separadas[i + 1]
-            n = instrucciones_separadas[i + 2]
-            if (X in [":balloons", ":chips"]) and n.isnumeric():
-                i += 3
             else:
                 sintaxis_correcta = False
-                sintaxis_correcta = False
                 break
-
 
         # Verificar (pick X n)
         elif i + 2 < len(instrucciones_separadas) and instruccion == "pick":
@@ -156,13 +110,7 @@ def commands_verification(instrucciones) -> bool:
             n = instrucciones_separadas[i + 2]
             if (X in [":balloons", ":chips"]) and n.isnumeric():
                 i += 3
-        elif i + 2 < len(instrucciones_separadas) and instruccion == "pick":
-            X = instrucciones_separadas[i + 1]
-            n = instrucciones_separadas[i + 2]
-            if (X in [":balloons", ":chips"]) and n.isnumeric():
-                i += 3
             else:
-                sintaxis_correcta = False
                 sintaxis_correcta = False
                 break
 
@@ -170,14 +118,9 @@ def commands_verification(instrucciones) -> bool:
         elif i + 2 < len(instrucciones_separadas) and instruccion == "move-dir":
             n = instrucciones_separadas[i + 1]
             D = instrucciones_separadas[i + 2]
-        elif i + 2 < len(instrucciones_separadas) and instruccion == "move-dir":
-            n = instrucciones_separadas[i + 1]
-            D = instrucciones_separadas[i + 2]
             if (n.isnumeric() or n in constantes_validas) and (D in direcciones_validas):
                 i += 3
-                i += 3
             else:
-                sintaxis_correcta = False
                 sintaxis_correcta = False
                 break
 
@@ -194,49 +137,21 @@ def commands_verification(instrucciones) -> bool:
         elif i + 2 < len(instrucciones_separadas) and instruccion == "move-face":
             n = instrucciones_separadas[i + 1]
             O = instrucciones_separadas[i + 2]
-        elif i + 1 < len(instrucciones_separadas) and instruccion == "run-dirs":
-            Ds = instrucciones_separadas[i + 1]
-            if not all(direccion in direcciones_validas for direccion in Ds):
-                sintaxis_correcta = False
-                break
-            else:
-                i += 2
-
-        # Verificar (move-face n O)
-        elif i + 2 < len(instrucciones_separadas) and instruccion == "move-face":
-            n = instrucciones_separadas[i + 1]
-            O = instrucciones_separadas[i + 2]
             if (n.isnumeric() or n in constantes_validas) and (O in direcciones_validas):
                 i += 3
-                i += 3
             else:
-                sintaxis_correcta = False
                 sintaxis_correcta = False
                 break
 
-        # Permitir null
         # Permitir null
         elif instruccion == "null":
             i += 1
-        
-        i+=1
+
+        i += 1
 
     return sintaxis_correcta
 
 
-def functDef_verification(instrucciones) -> bool:
-    if isinstance(instrucciones, list):
-        instrucciones_separadas = instrucciones
-    else:
-        instrucciones_separadas = instrucciones.split()
-
-    sintaxis_correcta = True
-    i = 0
-
-    while i + 2 < len(instrucciones_separadas):
-        instruct = instrucciones_separadas[i]
-        if instruct == "defun":
-            name = instrucciones_separadas[i + 1]
 def functDef_verification(instrucciones) -> bool:
     if isinstance(instrucciones, list):
         instrucciones_separadas = instrucciones
@@ -252,13 +167,7 @@ def functDef_verification(instrucciones) -> bool:
             name = instrucciones_separadas[i + 1]
             if not name.isalpha():
                 sintaxis_correcta = False
-                sintaxis_correcta = False
                 break
-
-            params = []
-            if instrucciones_separadas[i + 2] == "(":
-                pos_paren = []
-                for elem in range(i + 3, len(instrucciones_separadas)):
 
             params = []
             if instrucciones_separadas[i + 2] == "(":
@@ -266,7 +175,7 @@ def functDef_verification(instrucciones) -> bool:
                 for elem in range(i + 3, len(instrucciones_separadas)):
                     if instrucciones_separadas[elem] == ")":
                         pos_paren.append(elem)
-                        break  # Sale del loop cuando se encuentra ')' 
+                        break
                 if pos_paren:
                     first_cerrado = pos_paren[0]
                     for elemento in range(i + 3, first_cerrado):
@@ -277,8 +186,8 @@ def functDef_verification(instrucciones) -> bool:
                             sintaxis_correcta = False
                             break
 
-                    if first_cerrado + 2 < len(instrucciones_separadas):  
-                        commands = instrucciones_separadas[first_cerrado + 2 : -1]
+                    if first_cerrado + 2 < len(instrucciones_separadas):
+                        commands = instrucciones_separadas[first_cerrado + 2: -1]
                         if not commands:
                             sintaxis_correcta = False
                             break
@@ -294,38 +203,6 @@ def functDef_verification(instrucciones) -> bool:
     return sintaxis_correcta
 
 
-                        break  # Sale del loop cuando se encuentra ')' 
-                if pos_paren:
-                    first_cerrado = pos_paren[0]
-                    for elemento in range(i + 3, first_cerrado):
-                        params.append(instrucciones_separadas[elemento])
-
-                    for elem in params:
-                        if not elem.isalnum():
-                            sintaxis_correcta = False
-                            break
-
-                    if first_cerrado + 2 < len(instrucciones_separadas):  
-                        commands = instrucciones_separadas[first_cerrado + 2 : -1]
-                        if not commands:
-                            sintaxis_correcta = False
-                            break
-
-                        sintaxis_correcta = commands_verification(commands)
-                        if not sintaxis_correcta:
-                            break
-
-            break
-
-        i += 1
-
-    return sintaxis_correcta
-
-
-
-
-def condition_verification(instrucciones) -> bool:
-    if isinstance(instrucciones, list):
 def condition_verification(instrucciones) -> bool:
     if isinstance(instrucciones, list):
         instrucciones_separadas = instrucciones
@@ -345,34 +222,14 @@ def condition_verification(instrucciones) -> bool:
                 i += 2
             else:
                 sintaxis_correcta = False
-    direcciones_validas = [":north", ":south", ":east", ":west"]
-    x = ["chips", "balloons"]
-    i = 0
-    sintaxis_correcta = True
-
-    while i < len(instrucciones_separadas):
-        instruccion = instrucciones_separadas[i]
-
-        if instruccion == "facing?":
-            if (i + 2) < len(instrucciones_separadas) and instrucciones_separadas[i + 2] in direcciones_validas:
-                i += 2
-            else:
-                sintaxis_correcta = False
                 break
 
         elif instruccion == "blocked?":
-            # Syntax is correct for blocked?, no additional parameters to check
-            pass
-
-        elif instruccion == "blocked?":
-            # Syntax is correct for blocked?, no additional parameters to check
             pass
 
         elif instruccion == "can-put?" or instruccion == "can-pick?":
-            if (i + 3) < len(instrucciones_separadas) and instrucciones_separadas[i + 2] in x and instrucciones_separadas[i + 3].isdigit():
-                i += 3
-        elif instruccion == "can-put?" or instruccion == "can-pick?":
-            if (i + 3) < len(instrucciones_separadas) and instrucciones_separadas[i + 2] in x and instrucciones_separadas[i + 3].isdigit():
+            if (i + 3) < len(instrucciones_separadas) and instrucciones_separadas[i + 2] in x and \
+                    instrucciones_separadas[i + 3].isdigit():
                 i += 3
             else:
                 sintaxis_correcta = False
@@ -381,20 +238,9 @@ def condition_verification(instrucciones) -> bool:
         elif instruccion == "can-move?":
             if (i + 2) < len(instrucciones_separadas) and instrucciones_separadas[i + 2] in direcciones_validas:
                 i += 2
-                sintaxis_correcta = False
-                break
-
-        elif instruccion == "can-move?":
-            if (i + 2) < len(instrucciones_separadas) and instrucciones_separadas[i + 2] in direcciones_validas:
-                i += 2
             else:
                 sintaxis_correcta = False
-                sintaxis_correcta = False
                 break
-
-        elif instruccion == "isZero?":
-            if (i + 2) < len(instrucciones_separadas) and instrucciones_separadas[i + 2].isdigit():
-                i += 2
 
         elif instruccion == "isZero?":
             if (i + 2) < len(instrucciones_separadas) and instrucciones_separadas[i + 2].isdigit():
@@ -402,13 +248,7 @@ def condition_verification(instrucciones) -> bool:
             else:
                 sintaxis_correcta = False
                 break
-                sintaxis_correcta = False
-                break
 
-        elif instruccion == "not":
-            if (i + 2) < len(instrucciones_separadas):
-                # Check for the correctness of the nested condition after "not"
-                i += 2
         elif instruccion == "not":
             if (i + 2) < len(instrucciones_separadas):
                 # Check for the correctness of the nested condition after "not"
@@ -416,18 +256,12 @@ def condition_verification(instrucciones) -> bool:
             else:
                 sintaxis_correcta = False
                 break
-                sintaxis_correcta = False
-                break
 
-        i += 1
         i += 1
 
     return sintaxis_correcta
-    return sintaxis_correcta
-
 
 
 if contenido_archivo:
     resultado_parser = " yes" if parser_robot(contenido_archivo) else " no"
-    print("Is the syntax correct?"  + resultado_parser)
-
+    print("Is the syntax correct?" + resultado_parser)
