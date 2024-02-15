@@ -10,18 +10,30 @@ def procesar_archivo_texto(ruta_archivo):
         return None
 
 # Ruta del archivo de texto con las instrucciones
-ruta_archivo = "/Users/anacristinarodriguez/Desktop/Lym/Pruebas.txt"  
+ruta_archivo = "\Users\paula\Desktop\Lym\Pruebas.txt"
 contenido_archivo = procesar_archivo_texto(ruta_archivo)
 
 
 def parser_robot(instrucciones)-> bool:
-    sintaxis_correcta=True
-    instrucciones_separadas = instrucciones.split()
-    direcciones_validas = [":front", ":right", ":left", ":back"]
-    constantes_validas = ["Dim", "myXpos", "myYpos", "myChips", "myBalloons", "balloonsHere" , "ChipsHere" , "Spaces"]
-    print(instrucciones_separadas)
-    
+    sintaxis_correcta=False
+    if commands_verification(instrucciones):
+        sintaxis_correcta=True
+    elif functDef_verification(instrucciones):
+        sintaxis_correcta=True
+    elif condition_verification(instrucciones):
+        sintaxis_correcta=True
+    else:
+        sintaxis_correcta=False
+    #print(instrucciones_separadas)
 
+def commands_verification(instrucciones)-> bool:
+    constantes_validas = ["Dim", "myXpos", "myYpos", "myChips", "myBalloons", "balloonsHere" , "ChipsHere" , "Spaces"]
+    direcciones_validas = [":front", ":right", ":left", ":back"]
+
+    if isinstance(instrucciones,list) == True:
+        instrucciones_separadas = instrucciones
+    else:
+        instrucciones_separadas = instrucciones.split()
     i=0
     while i < len(instrucciones_separadas):
         instruccion=instrucciones_separadas[i]
@@ -29,6 +41,7 @@ def parser_robot(instrucciones)-> bool:
         # Verificar (defvar name n)
         # Verifica que la lista instrucciones_separadas tenga al menos dos elementos más a partir de la posición actual
         if i+2 < len(instrucciones_separadas) and instruccion == "defvar":
+            
             name = instrucciones_separadas[i+1]
             n = instrucciones_separadas[i+2]
             if (name.isalpha()) and (n.isnumeric() or n in constantes_validas):
@@ -108,7 +121,7 @@ def parser_robot(instrucciones)-> bool:
         elif i+2 < len(instrucciones_separadas) and instruccion == "move-dir":
             n = instrucciones_separadas[i+1]
             D = instrucciones_separadas[i+2]
-            if (n.isnumeric() or n in constantes_validas) and (D == ":front" or ":right" or ":left" or ":back"):
+            if (n.isnumeric() or n in constantes_validas) and (D in direcciones_validas):
                 i+=3
             else:
                 sintaxis_correcta=False
@@ -119,17 +132,16 @@ def parser_robot(instrucciones)-> bool:
             Ds = instrucciones_separadas[i+1]
             for direccion in Ds:
                 if direccion not in direcciones_validas:
+                    sintaxis_correcta=False 
+                else:
                     sintaxis_correcta=False
-                    break          
-            else:
-                sintaxis_correcta=False
-                break
+                    break
         
         # Verificar (move-face n O):
         elif i+2 < len(instrucciones_separadas) and instruccion == "move-face":
             n = instrucciones_separadas[i+1]
             O = instrucciones_separadas[i+2]
-            if (n.isnumeric() or n in constantes_validas) and (O == ":north" or ":south" or ":west" or ":east"):
+            if (n.isnumeric() or n in constantes_validas) and (O in direcciones_validas):
                 i+=3
             else:
                 sintaxis_correcta=False
@@ -140,11 +152,106 @@ def parser_robot(instrucciones)-> bool:
             i+=1
             continue
 
-        #Verficiar function definition
+def functDef_verification(instrucciones)->bool:
+        if isinstance(instrucciones,list) == True:
+            instrucciones_separadas = instrucciones
+        else:
+            instrucciones_separadas = instrucciones.split()
+        i=0
+        instruct=instrucciones_separadas[i+1]
+        commands=[]
+        pos_paren=[]
+        elif i+2 < len(instrucciones_separadas) and instruct == "defun":
+            name = instrucciones_separadas[i+2]
+            if not name.isalpha():
+                sintaxis_correcta=False
+                break
+            else: 
+                sintaxis_correcta=True
+            params=[]
+            if instrucciones_separadas[i+3]=="(":
+                for elem in range(4,len(instrucciones_separadas)):
+                    if instrucciones_separadas[elem] == ")":
+                        pos_paren.append(elem)
+                first_cerrado=pos_paren[0]
+                for elemento in range(4,first_cerrado):
+                    params.append(instrucciones_separadas[elem])
+                for eleme in params:
+                    if not eleme.isalnum():
+                        sintaxis_correcta=False
+                        break
+                    else:
+                        sintaxis_correcta=True
+                if instrucciones_separadas[first_cerrado+1] == "(":
+                    for comando in range(first_cerrado+1,len(instrucciones_separadas)-1):
+                        commands.append(instrucciones_separadas[comando])
+            if commands_verification(commands) == True:
+                sintaxis_correcta = True
+            else:
+                sintaxis_correcta = False
+                    
+        return (sintaxis_correcta)
 
-        i+=1
 
-    return (sintaxis_correcta)
+def condition_verification(instrucciones)->bool:
+    if isinstance(instrucciones,list) == True:
+        instrucciones_separadas = instrucciones
+    else:
+        instrucciones_separadas = instrucciones.split()
+
+    instrucciones_separadas = instrucciones.split()
+    direcciones_validas=[":north", ":south", ":east", ":west"]
+    x=["chips","balloons"]
+    i=0
+        #Verificar facing?
+        elif instrucciones_separadas[i+1] == "facing?":
+            if instrucciones_separadas[i+2] in direcciones_validas:
+                sintaxis_correcta=True
+                break
+            else:
+                sintaxis_correcta=False
+        
+        #Verificar blocked?
+
+        #Verificar can-put?
+        elif instrucciones_separadas[i+1] == "can-put?":
+            if instrucciones_separadas[i+2] in x:
+                if (instrucciones_separadas[i+3]).isdigit():
+                    sintaxis_correcta=True
+                    break
+            else:
+                sintaxis_correcta=False
+
+        #Verificar can-pick?
+        elif instrucciones_separadas[i+1] == "can-pick?":
+            if instrucciones_separadas[i+2] in x:
+                if (instrucciones_separadas[i+3]).isdigit():
+                    sintaxis_correcta=True
+                    break
+            else:
+                sintaxis_correcta=False
+
+        #Verificar can-move?
+        elif instrucciones_separadas[i+1] == "can-move?":
+            if instrucciones_separadas[i+2] in direcciones_validas:
+                sintaxis_correcta=True
+                break
+            else:
+                sintaxis_correcta=False
+
+        #Verificar isZero?
+        elif (instrucciones_separadas[i+1]).lower() == "iszero?":
+            if (instrucciones_separadas[i+2]).isdigit():
+                sintaxis_correcta=True
+            else:
+                sintaxis_correcta=False
+
+        #Verificar not cond
+        elif instrucciones_separadas[i+1] == "not":
+            if instrucciones_separadas[i+2] ==
+
+
+
 
 
 if contenido_archivo:
