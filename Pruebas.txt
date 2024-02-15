@@ -1,1 +1,1 @@
-( defvar rotate 3 )
+( defvar rotat e 3)
