@@ -9,7 +9,7 @@ def procesar_archivo_texto(ruta_archivo):
         return None
 
 # Ruta del archivo de texto con las instrucciones
-ruta_archivo = "/Users/anacristinarodriguez/Desktop/Lym/pruebas.txt"
+ruta_archivo = "/Users/anacristinarodriguez/Desktop/Lym/instrucciones.txt"
 contenido_archivo = procesar_archivo_texto(ruta_archivo)
 
 
