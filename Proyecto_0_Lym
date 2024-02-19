@@ -185,6 +185,12 @@ def functDef_verification(instrucciones) -> bool:
                         if not elem.isalnum():
                             sintaxis_correcta = False
                             break
+                            
+                    if "(" in instrucciones_separadas[first_cerrado+1]:
+                    if len(instrucciones_separadas[first_cerrado+1])>1:
+                        instruccion_sinparen=instrucciones_separadas[first_cerrado+1].replace("(","")                     
+                        instrucciones_separadas.insert(first_cerrado+1, "(")
+                        instrucciones_separadas[first_cerrado+2]=instruccion_sinparen
 
                     if first_cerrado + 2 < len(instrucciones_separadas):
                         commands = instrucciones_separadas[first_cerrado + 2: -1]
